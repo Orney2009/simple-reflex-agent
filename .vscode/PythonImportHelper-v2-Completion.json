@@ -1,5 +1,71 @@
 [
     {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "re",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "re",
+        "description": "re",
+        "detail": "re",
+        "documentation": {}
+    },
+    {
+        "label": "Any",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "create_agent",
+        "importPath": "langchain.agents",
+        "description": "langchain.agents",
+        "isExtraImport": true,
+        "detail": "langchain.agents",
+        "documentation": {}
+    },
+    {
+        "label": "tool",
+        "importPath": "langchain_core.tools",
+        "description": "langchain_core.tools",
+        "isExtraImport": true,
+        "detail": "langchain_core.tools",
+        "documentation": {}
+    },
+    {
+        "label": "ChatGoogleGenerativeAI",
+        "importPath": "langchain_google_genai",
+        "description": "langchain_google_genai",
+        "isExtraImport": true,
+        "detail": "langchain_google_genai",
+        "documentation": {}
+    },
+    {
+        "label": "InMemorySaver",
+        "importPath": "langgraph.checkpoint.memory",
+        "description": "langgraph.checkpoint.memory",
+        "isExtraImport": true,
+        "detail": "langgraph.checkpoint.memory",
+        "documentation": {}
+    },
+    {
         "label": "matplotlib",
         "kind": 6,
         "isExtraImport": true,
@@ -15,15 +81,6 @@
         "importPath": "importlib.util",
         "description": "importlib.util",
         "detail": "importlib.util",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
         "documentation": {}
     },
     {
@@ -54,66 +111,147 @@
         "documentation": {}
     },
     {
+        "label": "extract_application_info",
+        "kind": 2,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "def extract_application_info(text: str) -> str:\n    name_pattern = (\n        r\"(?:my name is|i am)\\s+\"\n        r\"([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*)\"\n    )\n    skills_pattern = r\"(?:skills are|i know|i can use)\\s+(.+)\"\n    name_match = re.search(name_pattern, text, re.IGNORECASE)\n    email_match = re.search(r\"\\b[\\w.-]+@[\\w.-]+\\.\\w+\\b\", text)\n    skills_match = re.search(skills_pattern, text, re.IGNORECASE)\n    response = []",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "extract_application_info_tool",
+        "kind": 2,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "def extract_application_info_tool(text: str) -> str:\n    \"\"\"Extract and save the user's name, email, and skills from free text.\"\"\"\n    return extract_application_info(text)\n@tool(return_direct=True)\ndef check_application_goal(_: str = \"\") -> str:\n    \"\"\"Check whether all required application info is collected.\"\"\"\n    if all(application_info.values()):\n        name = application_info[\"name\"]\n        email = application_info[\"email\"]\n        skills = application_info[\"skills\"]",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "check_application_goal",
+        "kind": 2,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "def check_application_goal(_: str = \"\") -> str:\n    \"\"\"Check whether all required application info is collected.\"\"\"\n    if all(application_info.values()):\n        name = application_info[\"name\"]\n        email = application_info[\"email\"]\n        skills = application_info[\"skills\"]\n        return (\n            f\"✅ You're ready! Name: {name}, \"\n            f\"Email: {email}, Skills: {skills}.\"\n        )",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "get_last_assistant_output",
+        "kind": 2,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "def get_last_assistant_output(state: dict[str, Any]) -> str:\n    messages = state.get(\"messages\", [])\n    for message in reversed(messages):\n        if isinstance(message, dict):\n            role = message.get(\"role\") or message.get(\"type\")\n            if role in {\"assistant\", \"ai\", \"tool\"}:\n                return _content_to_text(message.get(\"content\", \"\")).strip()\n        if getattr(message, \"type\", \"\") in {\"ai\", \"tool\"}:\n            return _content_to_text(getattr(message, \"content\", \"\")).strip()\n    return \"\"",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "llm",
+        "kind": 5,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "llm = ChatGoogleGenerativeAI(\n    model=\"gemini-2.5-flash\",\n    google_api_key=os.getenv(\"GOOGLE_API_KEY\"),\n)\napplication_info = {\n    \"name\": None,\n    \"email\": None,\n    \"skills\": None,\n}\ndef extract_application_info(text: str) -> str:",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "application_info",
+        "kind": 5,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "application_info = {\n    \"name\": None,\n    \"email\": None,\n    \"skills\": None,\n}\ndef extract_application_info(text: str) -> str:\n    name_pattern = (\n        r\"(?:my name is|i am)\\s+\"\n        r\"([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)*)\"\n    )",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "tools",
+        "kind": 5,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "tools = [\n    extract_application_info_tool,\n    check_application_goal,\n]\nSYSTEM_PROMPT = \"\"\"You are a helpful job application assistant.\nYour goal is to collect the user's name, email, and skills.\nUse the tools provided to extract this information and check whether all\nrequired data is collected.\nOnce everything is collected, inform the user that the application info\nis complete and stop.",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "SYSTEM_PROMPT",
+        "kind": 5,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "SYSTEM_PROMPT = \"\"\"You are a helpful job application assistant.\nYour goal is to collect the user's name, email, and skills.\nUse the tools provided to extract this information and check whether all\nrequired data is collected.\nOnce everything is collected, inform the user that the application info\nis complete and stop.\n\"\"\"\nagent = create_agent(\n    model=llm,\n    tools=tools,",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
+        "label": "agent",
+        "kind": 5,
+        "importPath": "goal-based-agent.goal-based-demo-v1",
+        "description": "goal-based-agent.goal-based-demo-v1",
+        "peekOfCode": "agent = create_agent(\n    model=llm,\n    tools=tools,\n    system_prompt=SYSTEM_PROMPT,\n    checkpointer=InMemorySaver(),\n)\ndef _content_to_text(content: Any) -> str:\n    if isinstance(content, str):\n        return content\n    if isinstance(content, list):",
+        "detail": "goal-based-agent.goal-based-demo-v1",
+        "documentation": {}
+    },
+    {
         "label": "reflex_agent",
         "kind": 2,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "def reflex_agent(state):\n    if state == \"Dirty\":\n        return \"Clean\"\n    else:\n        return \"Move\"\n#  Function to Draw the Grid\ndef draw_environment(ax, env, agent_pos, step):\n    ax.clear()\n    ax.set_xlim(0, 2) \n    ax.set_ylim(0, 2) ",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     },
     {
         "label": "draw_environment",
         "kind": 2,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "def draw_environment(ax, env, agent_pos, step):\n    ax.clear()\n    ax.set_xlim(0, 2) \n    ax.set_ylim(0, 2) \n    ax.set_xticks([])\n    ax.set_yticks([]) \n    ax.set_title(f\"Step {step} — Agent in {rooms[agent_pos]}\")\n    for room, pos in room_positions.items():  \n        x, y = pos\n        color = 'red' if env[room] == \"Dirty\" else 'green'  ",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     },
     {
         "label": "environment",
         "kind": 5,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "environment = {\n    \"Room1\": \"Clean\",\n    \"Room2\": \"Dirty\",   # Start with dirt here\n    \"Room3\": \"Clean\",\n    \"Room4\": \"Clean\"\n}\n# Mapping for grid positions\nroom_positions = {\n    \"Room1\": (0, 1),  # Top-left\n    \"Room2\": (1, 1),  # Top-right",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     },
     {
         "label": "room_positions",
         "kind": 5,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "room_positions = {\n    \"Room1\": (0, 1),  # Top-left\n    \"Room2\": (1, 1),  # Top-right\n    \"Room3\": (0, 0),  # Bottom-left\n    \"Room4\": (1, 0)   # Bottom-right\n}\nrooms = list(environment.keys())  \nagent_index = 0  \n# Reflex Agent Function\ndef reflex_agent(state):",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     },
     {
         "label": "rooms",
         "kind": 5,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "rooms = list(environment.keys())  \nagent_index = 0  \n# Reflex Agent Function\ndef reflex_agent(state):\n    if state == \"Dirty\":\n        return \"Clean\"\n    else:\n        return \"Move\"\n#  Function to Draw the Grid\ndef draw_environment(ax, env, agent_pos, step):",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     },
     {
         "label": "agent_index",
         "kind": 5,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "agent_index = 0  \n# Reflex Agent Function\ndef reflex_agent(state):\n    if state == \"Dirty\":\n        return \"Clean\"\n    else:\n        return \"Move\"\n#  Function to Draw the Grid\ndef draw_environment(ax, env, agent_pos, step):\n    ax.clear()",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     },
     {
         "label": "steps",
         "kind": 5,
-        "importPath": "demo",
-        "description": "demo",
+        "importPath": "simple-reflex-demo",
+        "description": "simple-reflex-demo",
         "peekOfCode": "steps = 8  \nfor step in range(steps):\n    current_room = rooms[agent_index] \n    state = environment[current_room] \n    action = reflex_agent(state) \n    draw_environment(ax, environment, agent_index, step + 1) \n    if action == \"Clean\": # If the agent decides to clean, this line updates the environment, marking the room as \"Clean\".\n        environment[current_room] = \"Clean\"\n    else:\n        agent_index = (agent_index + 1) % len(rooms) ",
-        "detail": "demo",
+        "detail": "simple-reflex-demo",
         "documentation": {}
     }
 ]
