@@ -1,4 +1,4 @@
-# Simple Reflex Agent Demos
+# Reflex Agent Demos
 
 This workspace contains small agent demos built with LangChain and Gemini.
 
