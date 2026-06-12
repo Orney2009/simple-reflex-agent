@@ -70,7 +70,7 @@ streamlit==1.55.0
 tenacity==9.1.4
 tk==0.1.0
 toml==0.10.2
-tornado==6.5.5
+tornado==6.5.6
 typing-inspection==0.4.2
 typing_extensions==4.15.0
 tzdata==2025.3
